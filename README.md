@@ -28,5 +28,11 @@ To compile and run the program, we can use the following steps:
 </pre>
   This creates an executable file called "sched_test".
   </li>
-  
+  <li> Run the program using the ./sched_test command: </li>
+  <pre>
+  <code>
+    ./sched_test
+  </code>
+</pre>
+
 </ol>
