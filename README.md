@@ -73,19 +73,19 @@ Here is an example of how you could use the workload function in a thread:
 
 <pre>
   <code>
-    void *thread_func(void *arg) {
-    thread_args *targ = (thread_args *)arg;
- 
-    /* Set scheduling policy for the thread */
-    struct sched_param param;
-    param.sched_priority = sched_get_priority_max(targ->policy);
-    pthread_setschedparam(pthread_self(), targ->policy, &param);
- 
-    /* Do some work */
-    workload();
- 
-    return NULL;
-    }
+  void * thread_func(void * arg) {
+  thread_args * targ = (thread_args * ) arg;
+
+  /* Set scheduling policy for the thread */
+  struct sched_param param;
+  param.sched_priority = sched_get_priority_max(targ -> policy);
+  pthread_setschedparam(pthread_self(), targ -> policy, ¶m);
+
+  /* Do some work */
+  workload();
+
+  return NULL;
+}
   </code>
 </pre>
 
