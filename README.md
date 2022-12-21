@@ -21,6 +21,10 @@ To run this program on different Linux kernels, we need to compile and run the p
 To compile and run the program, we can use the following steps:
 <ol> 
   <li>Open a terminal and navigate to the directory where the program is saved.</li>
-  <li>Compile the program using the gcc command:  <font color=#ffffdd>gcc -o sched_test sched_test.c -lpthread</font><font color=#ffffdd>middle button</font></li>
+  <li>Compile the program using the gcc command:  <pre>
+  <code>
+    gcc -o sched_test sched_test.c -lpthread
+  </code>
+</pre></li>
   
 </ol>
