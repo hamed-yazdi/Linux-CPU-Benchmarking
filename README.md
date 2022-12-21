@@ -17,7 +17,7 @@ It's important to note that we need to have root privileges to set the schedulin
 This program creates 5 threads, each with a different scheduling policy. The "thread_func" function will be executed by each thread and sets the scheduling policy for the thread using the "pthread_setschedparam" function. The main function creates the threads and measures the time taken for each thread to complete its work using the "clock_gettime" function. The program will be completed to calculate the throughput and latency for each policy and prints the results to the console.
  
 # How to run the program
-To run this program on different Linux kernels, we need to compile and run the program on a system with each kernel that we want to test. You can use the "uname" command to determine the version of the Linux kernel that we are running.
+To run this program on different Linux kernels, we need to compile and run the program on a system with each kernel that we want to test. we can use the "uname" command to determine the version of the Linux kernel that we are running.
  
  
 To compile and run the program, we can use the following steps:
