@@ -25,6 +25,8 @@ To compile and run the program, we can use the following steps:
   <code>
     gcc -o sched_test sched_test.c -lpthread
   </code>
-</pre></li>
+</pre>
+  This creates an executable file called "sched_test".
+  </li>
   
 </ol>
