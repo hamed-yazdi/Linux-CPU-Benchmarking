@@ -1,4 +1,4 @@
-To develop the multithreaded <a href="url">program</a> to test and compare a subset of the Linux scheduling policies available, we follow these steps:
+To develop the multithreaded <a href="https://github.com/hamed-yazdi/Linux-CPU-Benchmarking/blob/main/benchmark.c">program</a> to test and compare a subset of the Linux scheduling policies available, we follow these steps:
 
 <ol>
   <li>Choose the scheduling policies: <b>SCHED_OTHER, SCHED_BATCH, SCHED_IDLE, SCHED_FIFO, and SCHED_RR</b>.</li>
