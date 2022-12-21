@@ -17,7 +17,7 @@ It's important to note that we need to have root privileges to set the schedulin
 This program creates 5 threads, each with a different scheduling policy. The "thread_func" function will be executed by each thread and sets the scheduling policy for the thread using the "pthread_setschedparam" function. The main function creates the threads and measures the time taken for each thread to complete its work using the "clock_gettime" function. The program will be completed to calculate the throughput and latency for each policy and prints the results to the console.
  
 # How to run the program
-To run this program on different Linux kernels, we need to compile and run the program on a system with each kernel that you want to test. You can use the "uname" command to determine the version of the Linux kernel that we are running.
+To run this program on different Linux kernels, we need to compile and run the program on a system with each kernel that we want to test. You can use the "uname" command to determine the version of the Linux kernel that we are running.
  
  
 To compile and run the program, we can use the following steps:
@@ -40,7 +40,7 @@ To compile and run the program, we can use the following steps:
 </ol>
 
 
-# Ensure capability of the program with workloads
+# Ensure capability of the program with a workload
 To ensure that the program is adequate for testing the scheduling policies and is capable of running for a sufficient amount of time to draw conclusions, we may want to consider the following:
 <ol> 
   <li> Choose a representative workload: The workload that we use to test the scheduling policies should be representative of the type of work that we expect the system to perform in practice. For example, if we test the scheduling policies for a database server, we should use workloads that are similar to the types of queries that the database will receive.  </li>
@@ -70,7 +70,7 @@ This workload function contains a loop that performs a large number of iteration
  
 We can modify this workload function to perform more complex tasks, such as executing SQL queries on a database, performing calculations, or accessing files. The workload function should be representative of the type of work that we expect the system to perform in practice.
  
-Here is an example of how you could use the workload function in a thread:
+Here is an example of how we could use the workload function in a thread:
 
 
 <pre>
