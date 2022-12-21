@@ -2,6 +2,8 @@ The purpose of this program is to evaluate the performance of various Linux sche
 
 To develop a multithreaded program to test and compare a subset of the Linux scheduling policies available, we follow these steps:
 
-  1-  Choose the scheduling policies: SCHED_OTHER, SCHED_BATCH, SCHED_IDLE, SCHED_FIFO, and SCHED_RR.
-  
-  2-  Write a program that creates multiple threads and assigns each thread to a different scheduling policy. We use the "pthread_create" function to create the threads and the "pthread_setschedparam" function to set the scheduling policy for each thread.
+<ul>
+  <li>Choose the scheduling policies: SCHED_OTHER, SCHED_BATCH, SCHED_IDLE, SCHED_FIFO, and SCHED_RR.</li>
+  <li>Write a program that creates multiple threads and assigns each thread to a different scheduling policy. We use the "pthread_create" function to create the threads and the "pthread_setschedparam" function to set the scheduling policy for each thread.
+</li>
+</ul>
