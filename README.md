@@ -36,3 +36,59 @@ To compile and run the program, we can use the following steps:
 </pre>
 
 </ol>
+
+
+
+To ensure that the program is adequate for testing the scheduling policies and is capable of running for a sufficient amount of time to draw conclusions, we may want to consider the following:
+<ol> 
+  <li> Choose a representative workload: The workload that we use to test the scheduling policies should be representative of the type of work that we expect the system to perform in practice. For example, if we test the scheduling policies for a database server, we should use workloads that are similar to the types of queries that the database will receive.  </li>
+ 
+<li>  Use a sufficient number of threads: The number of threads that we use to test the scheduling policies should be sufficient to stress the system and give the meaningful results. The optimal number of threads will depend on the hardware and workload, but as a general rule, we should use at least as many threads as there are CPU cores on the system. </li> 
+ 
+<li>  Run the tests for a sufficient amount of time: The tests should be run for a sufficient amount of time to get accurate and reliable results. The optimal test duration will depend on the workload and the hardware, but as a general rule, we should run the tests for at least several minutes to get a representative sample of the performance of the system. </li> 
+ </ol> 
+ 
+By following these guidelines, we can ensure that the program is adequate for testing the scheduling policies and is capable of running for a sufficient amount of time to draw conclusions.
+ 
+Here is an example of a workload that we could use to test the scheduling policies:
+ 
+<pre>
+  <code>
+    void workload() {
+    /* Do some work */
+    int i;
+    for (i = 0; i < 1000000000; i++);
+    }
+  </code>
+</pre>
+
+
+ 
+This workload function contains a loop that performs a large number of iterations. This can be used as a basic workload to test the scheduling policies.
+ 
+We can modify this workload function to perform more complex tasks, such as executing SQL queries on a database, performing calculations, or accessing files. The workload function should be representative of the type of work that we expect the system to perform in practice.
+ 
+Here is an example of how you could use the workload function in a thread:
+
+
+<pre>
+  <code>
+    void *thread_func(void *arg) {
+    thread_args *targ = (thread_args *)arg;
+ 
+    /* Set scheduling policy for the thread */
+    struct sched_param param;
+    param.sched_priority = sched_get_priority_max(targ->policy);
+    pthread_setschedparam(pthread_self(), targ->policy, &param);
+ 
+    /* Do some work */
+    workload();
+ 
+    return NULL;
+    }
+  </code>
+</pre>
+
+
+
+ 
