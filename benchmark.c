@@ -7,7 +7,9 @@
 #include <stdint.h>
 #include <time.h>
 #include <sys/times.h>
-#define NUM_THREADS 10
+#include <string.h>
+#define NUM_THREADS 100
+int counter=0;
 
 /*create arrays for keep necessary times*/
 static clock_t st_time[NUM_THREADS];
@@ -53,6 +55,7 @@ void * Fun_Deadline(void *arg) {
     			z++;
     	}
     en_time[tid] = times(&en_cpu[tid]);
+    counter++;
     pthread_exit(NULL);
 }
 
@@ -173,15 +176,20 @@ void * Fun_OTHER(void *arg) {
 
 /*show collected times in terminal*/
 void show_result(){
+	FILE *fpt;
+	fpt = fopen("MyFile.csv", "w+");
+	fprintf(fpt,"thread_id, Start_time, End_time, Real_time, User_time, System_time, Elapsed_time\n");
 	/*print Real Time, User Time and System Time of each thread*/
 	for(int tid = 0; tid < NUM_THREADS; tid++){
 		double rt = (double)(en_time[tid] - st_time[tid]) / CLOCKS_PER_SEC*10000;
 		double ut = (double)(en_cpu[tid].tms_utime - st_cpu[tid].tms_utime) / CLOCKS_PER_SEC*10000;
 		double st = (double)(en_cpu[tid].tms_stime - st_cpu[tid].tms_stime) / CLOCKS_PER_SEC*10000;
-		printf("Thread %d --> Real Time: %f, User Time %f, System Time %f\n",tid, rt, ut,st);
+		printf("Thread %d --> Real Time: %f, User Time %f, System Time %f  --> en_time %d, st_time %d\n",tid, rt, ut,st,en_time[tid],st_time[tid]);
+		fprintf(fpt,"%d, %d, %d, %f, %f, %f\n", tid, st_time[tid], en_time[tid], rt, ut, st);
+
 	}
 	/*calculate Elapsed time of program by measure
-	 *  end time of the latest thread - start time of the first thread*/
+	 * end time of the latest thread - start time of the first thread*/
 	clock_t end = en_time[0];
 	clock_t start = st_time[0];
 	for(int tid = 0; tid < NUM_THREADS; tid++){
@@ -192,27 +200,25 @@ void show_result(){
 	}
 	double elapsed_time = (double)(end - start) / CLOCKS_PER_SEC*10000;
 	printf("Total Elapsed Time: %f\n",elapsed_time);
+	fprintf(fpt,"%d, %d, %d, %f, %f, %f, %d\n",NULL, NULL, NULL, NULL, NULL, NULL, elapsed_time);
+	fclose(fpt);
 }
-
 
 int main(int argc, char** argv) {
 	/*define multi-thread processes */
     pthread_t pthreadA[NUM_THREADS];
     for(int i=0; i<NUM_THREADS; i++){
-        pthread_create(&pthreadA[i], NULL, Fun_OTHER, (void *)i);
+        pthread_create(&pthreadA[i], NULL, Fun_Deadline, (void *)i);
     }
     /*wait for finishing all threads*/
-    for(int tid = 0; tid < NUM_THREADS; tid++){
-    	sleep(10);
-    	if(en_cpu[tid].tms_stime != NULL){
-    		continue;
-    	}
-    	else{
-    		printf("Benchmark is running\n");
-    	}
+
+    for(;;){
+    	if(counter == NUM_THREADS)
+    		break;
     }
     /*print aggregated times in terminal*/
     show_result();
+    //write_result();
     pthread_exit(0);
     return (EXIT_SUCCESS);
 }
