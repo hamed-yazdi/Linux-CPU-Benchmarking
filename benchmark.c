@@ -28,9 +28,7 @@ struct sched_attr {
 };
 
 /*apply desired scheduling policy to the current thread*/
-int sched_setattr(pid_t pid,
-              const struct sched_attr *attr,
-                                unsigned int flags) {
+int sched_setattr(pid_t pid, const struct sched_attr *attr, unsigned int flags) {
     return syscall(__NR_sched_setattr, pid, attr, flags);
 }
 
@@ -47,8 +45,6 @@ void * Fun_Deadline(void *arg) {
     int tid;
     tid = (int)arg;
     st_time[tid] = times(&st_cpu[tid]);
-    //sleep(2);
-    //
     int z=0;
     for(int i=0; i<1000; i++)
     	for(int j=0; j<1000; j++){
@@ -56,7 +52,6 @@ void * Fun_Deadline(void *arg) {
     		for(int k=0; k<1000; k++)
     			z++;
     	}
-    //
     en_time[tid] = times(&en_cpu[tid]);
     pthread_exit(NULL);
 }
@@ -72,8 +67,6 @@ void * Fun_FIFO(void *arg) {
     int tid;
     tid = (int)arg;
     st_time[tid] = times(&st_cpu[tid]);
-    //sleep(2);
-    //
     int z=0;
     for(int i=0; i<1000; i++)
     	for(int j=0; j<1000; j++){
@@ -81,7 +74,6 @@ void * Fun_FIFO(void *arg) {
     		for(int k=0; k<1000; k++)
     			z++;
     	}
-    //
     en_time[tid] = times(&en_cpu[tid]);
     pthread_exit(NULL);
 }
@@ -97,8 +89,6 @@ void * Fun_RR(void *arg) {
     int tid;
     tid = (int)arg;
     st_time[tid] = times(&st_cpu[tid]);
-    //sleep(2);
-    //
     int z=0;
     for(int i=0; i<1000; i++)
     	for(int j=0; j<1000; j++){
@@ -106,7 +96,6 @@ void * Fun_RR(void *arg) {
     		for(int k=0; k<1000; k++)
     			z++;
     	}
-    //
     en_time[tid] = times(&en_cpu[tid]);
     pthread_exit(NULL);
 }
@@ -123,8 +112,6 @@ void * Fun_IDLE(void *arg) {
     int tid;
     tid = (int)arg;
     st_time[tid] = times(&st_cpu[tid]);
-    //sleep(2);
-    //
     int z=0;
     for(int i=0; i<1000; i++)
     	for(int j=0; j<1000; j++){
@@ -132,7 +119,6 @@ void * Fun_IDLE(void *arg) {
     		for(int k=0; k<1000; k++)
     			z++;
     	}
-    //
     en_time[tid] = times(&en_cpu[tid]);
     pthread_exit(NULL);
 }
@@ -150,8 +136,6 @@ void * Fun_BATCH(void *arg) {
     int tid;
     tid = (int)arg;
     st_time[tid] = times(&st_cpu[tid]);
-    //sleep(2);
-    //
     int z=0;
     for(int i=0; i<1000; i++)
     	for(int j=0; j<1000; j++){
@@ -159,7 +143,6 @@ void * Fun_BATCH(void *arg) {
     		for(int k=0; k<1000; k++)
     			z++;
     	}
-    //
     en_time[tid] = times(&en_cpu[tid]);
     pthread_exit(NULL);
 }
@@ -177,8 +160,6 @@ void * Fun_OTHER(void *arg) {
     int tid;
     tid = (int)arg;
     st_time[tid] = times(&st_cpu[tid]);
-    //sleep(2);
-    //
     int z=0;
     for(int i=0; i<1000; i++)
     	for(int j=0; j<1000; j++){
@@ -186,7 +167,6 @@ void * Fun_OTHER(void *arg) {
     		for(int k=0; k<1000; k++)
     			z++;
     	}
-    //
     en_time[tid] = times(&en_cpu[tid]);
     pthread_exit(NULL);
 }
