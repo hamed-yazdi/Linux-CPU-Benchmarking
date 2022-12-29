@@ -39,9 +39,9 @@ void * Fun_Deadline(void *arg) {
     struct sched_attr attr = {
         .size = sizeof (attr),
         .sched_policy = SCHED_DEADLINE,
-        .sched_runtime = 0.5 * 1000 * 1000 * 1000,
-        .sched_period = 2 * 1000 * 1000 * 1000,
-        .sched_deadline = 0.25 * 1000 * 1000 * 1000,
+        .sched_runtime = 0.1 * 1000 * 1000 * 1000,
+        .sched_period = 100 * 1000 * 1000 * 1000,
+        .sched_deadline = 1 * 1000 * 1000 * 1000,
     };
     sched_setattr(0, &attr, 0);
     int tid;
