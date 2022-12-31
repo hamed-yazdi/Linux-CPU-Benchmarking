@@ -8,7 +8,7 @@
 #include <time.h>
 #include <sys/times.h>
 #include <string.h>
-#define NUM_THREADS 100
+#define NUM_THREADS 10
 int counter=0;
 
 /*create arrays for keep necessary times*/
@@ -34,6 +34,21 @@ int sched_setattr(pid_t pid, const struct sched_attr *attr, unsigned int flags) 
     return syscall(__NR_sched_setattr, pid, attr, flags);
 }
 
+void Func_cpu(void *arg){
+	int tid;
+	tid = (int)arg;
+	st_time[tid] = times(&st_cpu[tid]);
+	int z=0;
+	for(int i=0; i<1000; i++)
+		for(int j=0; j<1000; j++){
+			z=0;
+			for(int k=0; k<1000; k++)
+				z++;
+		}
+	en_time[tid] = times(&en_cpu[tid]);
+	counter++;
+	pthread_exit(NULL);
+}
 /*function which is running by DEADLINE scheduling algorithm*/
 void * Fun_Deadline(void *arg) {
     struct sched_attr attr = {
@@ -71,13 +86,15 @@ void * Fun_FIFO(void *arg) {
     tid = (int)arg;
     st_time[tid] = times(&st_cpu[tid]);
     int z=0;
-    for(int i=0; i<1000; i++)
-    	for(int j=0; j<1000; j++){
-    		z=0;
-    		for(int k=0; k<1000; k++)
-    			z++;
-    	}
+    for(int i=0; i<50; i++)
+    	for(int j=0; j<1000; j++)
+    		for(int k=0; k<1000; k++){
+    			z=0;
+    			for(int k=0; k<1000; k++)
+    				z++;
+    		}
     en_time[tid] = times(&en_cpu[tid]);
+    counter++;
     pthread_exit(NULL);
 }
 
@@ -100,6 +117,7 @@ void * Fun_RR(void *arg) {
     			z++;
     	}
     en_time[tid] = times(&en_cpu[tid]);
+    counter++;
     pthread_exit(NULL);
 }
 
@@ -123,6 +141,7 @@ void * Fun_IDLE(void *arg) {
     			z++;
     	}
     en_time[tid] = times(&en_cpu[tid]);
+    counter++;
     pthread_exit(NULL);
 }
 
@@ -147,6 +166,7 @@ void * Fun_BATCH(void *arg) {
     			z++;
     	}
     en_time[tid] = times(&en_cpu[tid]);
+    counter++;
     pthread_exit(NULL);
 }
 
@@ -171,11 +191,13 @@ void * Fun_OTHER(void *arg) {
     			z++;
     	}
     en_time[tid] = times(&en_cpu[tid]);
+    counter++;
     pthread_exit(NULL);
 }
 
 /*show collected times in terminal*/
 void show_result(){
+	printf("result start\n");
 	FILE *fpt;
 	fpt = fopen("MyFile.csv", "w+");
 	fprintf(fpt,"thread_id, Start_time, End_time, Real_time, User_time, System_time, Elapsed_time\n");
@@ -205,20 +227,61 @@ void show_result(){
 }
 
 int main(int argc, char** argv) {
+	/*Set schedule policy attributes*/
+    struct sched_attr attr = {
+            .size = sizeof (attr),
+            .sched_policy = SCHED_FIFO,
+            .sched_priority = 1,
+        };
+    /*struct sched_attr attr = {
+            .size = sizeof (attr),
+            .sched_policy = SCHED_RR,
+            .sched_priority = 1,
+        };*/
+    /*struct sched_attr attr = {
+            .size = sizeof (attr),
+            .sched_policy = SCHED_OTHER,
+            .sched_priority = 0,
+    		.sched_nice = 0,
+
+        };*/
+    /*struct sched_attr attr = {
+            .size = sizeof (attr),
+            .sched_policy = SCHED_DEADLINE,
+            .sched_runtime = 10 * 1000 * 1000,
+            .sched_period = 30 * 1000 * 1000,
+            .sched_deadline = 1 * 1000 * 1000,
+        };*/
+    /*struct sched_attr attr = {
+            .size = sizeof (attr),
+            .sched_policy = SCHED_BATCH,
+            .sched_priority = 0,
+    		.sched_nice = 0,
+
+        };*/
+    sched_setattr(0, &attr, 0);
 	/*define multi-thread processes */
     pthread_t pthreadA[NUM_THREADS];
     for(int i=0; i<NUM_THREADS; i++){
-        pthread_create(&pthreadA[i], NULL, Fun_Deadline, (void *)i);
+    	pthread_create(&pthreadA[i], NULL, Func_cpu, (void *)i);
+        //pthread_create(&pthreadA[i], NULL, Fun_Deadline, (void *)i);
     }
-    /*wait for finishing all threads*/
+    /*Role back main scheduling policy to OTHER*/
+    struct sched_attr attr_main_roleback = {
+            .size = sizeof (attr_main_roleback),
+            .sched_policy = SCHED_OTHER,
+            .sched_priority = 0,
+    		.sched_nice = 0,
 
+        };
+        sched_setattr(0, &attr_main_roleback, 0);
+    /*wait for finishing all threads*/
     for(;;){
     	if(counter == NUM_THREADS)
     		break;
     }
     /*print aggregated times in terminal*/
     show_result();
-    //write_result();
     pthread_exit(0);
     return (EXIT_SUCCESS);
 }
