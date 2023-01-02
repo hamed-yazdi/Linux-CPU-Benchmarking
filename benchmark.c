@@ -33,7 +33,7 @@ struct sched_attr {
 int sched_setattr(pid_t pid, const struct sched_attr *attr, unsigned int flags) {
     return syscall(__NR_sched_setattr, pid, attr, flags);
 }
-
+/*CPU_bound workload*/
 void Func_cpu(void *arg){
 	int tid;
 	tid = (int)arg;
@@ -49,153 +49,7 @@ void Func_cpu(void *arg){
 	counter++;
 	pthread_exit(NULL);
 }
-/*function which is running by DEADLINE scheduling algorithm*/
-void * Fun_Deadline(void *arg) {
-    struct sched_attr attr = {
-        .size = sizeof (attr),
-        .sched_policy = SCHED_DEADLINE,
-        .sched_runtime = 0.1 * 1000 * 1000 * 1000,
-        .sched_period = 100 * 1000 * 1000 * 1000,
-        .sched_deadline = 1 * 1000 * 1000 * 1000,
-    };
-    sched_setattr(0, &attr, 0);
-    int tid;
-    tid = (int)arg;
-    st_time[tid] = times(&st_cpu[tid]);
-    int z=0;
-    for(int i=0; i<1000; i++)
-    	for(int j=0; j<1000; j++){
-    		z=0;
-    		for(int k=0; k<1000; k++)
-    			z++;
-    	}
-    en_time[tid] = times(&en_cpu[tid]);
-    counter++;
-    pthread_exit(NULL);
-}
-
-/*function which is running by FIFO scheduling algorithm*/
-void * Fun_FIFO(void *arg) {
-    struct sched_attr attr = {
-        .size = sizeof (attr),
-        .sched_policy = SCHED_FIFO,
-        .sched_priority = 1,
-    };
-    sched_setattr(0, &attr, 0);
-    int tid;
-    tid = (int)arg;
-    st_time[tid] = times(&st_cpu[tid]);
-    int z=0;
-    for(int i=0; i<50; i++)
-    	for(int j=0; j<1000; j++)
-    		for(int k=0; k<1000; k++){
-    			z=0;
-    			for(int k=0; k<1000; k++)
-    				z++;
-    		}
-    en_time[tid] = times(&en_cpu[tid]);
-    counter++;
-    pthread_exit(NULL);
-}
-
-/*function which is running by RR scheduling algorithm*/
-void * Fun_RR(void *arg) {
-    struct sched_attr attr = {
-        .size = sizeof (attr),
-        .sched_policy = SCHED_RR,
-        .sched_priority = 1,
-    };
-    sched_setattr(0, &attr, 0);
-    int tid;
-    tid = (int)arg;
-    st_time[tid] = times(&st_cpu[tid]);
-    int z=0;
-    for(int i=0; i<1000; i++)
-    	for(int j=0; j<1000; j++){
-    		z=0;
-    		for(int k=0; k<1000; k++)
-    			z++;
-    	}
-    en_time[tid] = times(&en_cpu[tid]);
-    counter++;
-    pthread_exit(NULL);
-}
-
-/*function which is running by IDLE scheduling algorithm*/
-void * Fun_IDLE(void *arg) {
-    struct sched_attr attr = {
-        .size = sizeof (attr),
-        .sched_policy = SCHED_IDLE,
-        .sched_priority = 0,
-
-    };
-    sched_setattr(0, &attr, 0);
-    int tid;
-    tid = (int)arg;
-    st_time[tid] = times(&st_cpu[tid]);
-    int z=0;
-    for(int i=0; i<1000; i++)
-    	for(int j=0; j<1000; j++){
-    		z=0;
-    		for(int k=0; k<1000; k++)
-    			z++;
-    	}
-    en_time[tid] = times(&en_cpu[tid]);
-    counter++;
-    pthread_exit(NULL);
-}
-
-/*function which is running by BATCH scheduling algorithm*/
-void * Fun_BATCH(void *arg) {
-    struct sched_attr attr = {
-        .size = sizeof (attr),
-        .sched_policy = SCHED_BATCH,
-        .sched_priority = 0,
-		.sched_nice = 0,
-
-    };
-    sched_setattr(0, &attr, 0);
-    int tid;
-    tid = (int)arg;
-    st_time[tid] = times(&st_cpu[tid]);
-    int z=0;
-    for(int i=0; i<1000; i++)
-    	for(int j=0; j<1000; j++){
-    		z=0;
-    		for(int k=0; k<1000; k++)
-    			z++;
-    	}
-    en_time[tid] = times(&en_cpu[tid]);
-    counter++;
-    pthread_exit(NULL);
-}
-
-/*function which is running by OTHER scheduling algorithm*/
-void * Fun_OTHER(void *arg) {
-    struct sched_attr attr = {
-        .size = sizeof (attr),
-        .sched_policy = SCHED_OTHER,
-        .sched_priority = 0,
-		.sched_nice = 0,
-
-    };
-    sched_setattr(0, &attr, 0);
-    int tid;
-    tid = (int)arg;
-    st_time[tid] = times(&st_cpu[tid]);
-    int z=0;
-    for(int i=0; i<1000; i++)
-    	for(int j=0; j<1000; j++){
-    		z=0;
-    		for(int k=0; k<1000; k++)
-    			z++;
-    	}
-    en_time[tid] = times(&en_cpu[tid]);
-    counter++;
-    pthread_exit(NULL);
-}
-
-/*show collected times in terminal*/
+/*show collected times in terminal and write them in a file*/
 void show_result(){
 	printf("result start\n");
 	FILE *fpt;
@@ -243,7 +97,6 @@ int main(int argc, char** argv) {
             .sched_policy = SCHED_OTHER,
             .sched_priority = 0,
     		.sched_nice = 0,
-
         };*/
     /*struct sched_attr attr = {
             .size = sizeof (attr),
@@ -257,14 +110,12 @@ int main(int argc, char** argv) {
             .sched_policy = SCHED_BATCH,
             .sched_priority = 0,
     		.sched_nice = 0,
-
         };*/
     sched_setattr(0, &attr, 0);
-	/*define multi-thread processes */
+    /*define multi-thread processes */
     pthread_t pthreadA[NUM_THREADS];
     for(int i=0; i<NUM_THREADS; i++){
     	pthread_create(&pthreadA[i], NULL, Func_cpu, (void *)i);
-        //pthread_create(&pthreadA[i], NULL, Fun_Deadline, (void *)i);
     }
     /*Role back main scheduling policy to OTHER*/
     struct sched_attr attr_main_roleback = {
@@ -274,7 +125,7 @@ int main(int argc, char** argv) {
     		.sched_nice = 0,
 
         };
-        sched_setattr(0, &attr_main_roleback, 0);
+    sched_setattr(0, &attr_main_roleback, 0);
     /*wait for finishing all threads*/
     for(;;){
     	if(counter == NUM_THREADS)
