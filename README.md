@@ -3,7 +3,7 @@ To test and compare a subset of the Linux scheduling policies available, we foll
 
 <ol>
   <li>Choose the scheduling policies: <b>SCHED_OTHER, SCHED_BATCH, SCHED_IDLE, SCHED_FIFO, and SCHED_RR</b>.</li>
-  <li>Write the program that creates multiple threads and assigns each thread to the same scheduling policy. We use the <b>"pthread_create"</b> function to create the threads and the <b>"pthread_attr_setschedpolicy"</b> function to set the scheduling policy for each thread.
+  <li>Write the program that creates multiple threads and assigns each thread to the same scheduling policy. We use the <b>"pthread_create"</b> function to create the threads. Each thread inherits the main program scheduling policies that was adjusted by sched_setattr function.
 </li>
   <li>Write code to measure the throughput, latency, turnaround time and fairness of each thread. We use the <b>clock_t and tms</b> functions to measure the time taken for each thread to complete its work. The elapsed time of the program is also calculated by taking the difference between the start and end times.</li>
 <li>Run the program on different Linux scheduling policy and record the results. We can use the <b>chrt -p "PID"</b> command to determine the the Linux scheduling policy of each thread we are running.</li>
@@ -12,7 +12,7 @@ To test and compare a subset of the Linux scheduling policies available, we foll
   
 </ol>
 
-It's important to note that we need to have root privileges to set the scheduling policy for a thread. We can use the <b>seteuid</b> function to temporarily drop privileges, set the scheduling policy, and then restore privileges after the policy has been set.
+It's important to note that we need to have root privileges to set the scheduling policy for a thread.
 
 This program creates 10 threads, each with a same scheduling policy. The "thread_func" function will be executed by each thread and measures the time taken for each thread to complete its work using the "clock_t and tms" function. The main function creates the threads and sets the scheduling policy for each the thread using the "pthread_attr_setschedpolicy" function. The program will be completed to calculate the elapsed time, real time, user time and system time for each thread and prints the results to the console. we are using them in order to measure such metrics like throughput, latency, turnaround time and fairness of each scheduling policy. 
  
@@ -43,7 +43,7 @@ To compile and run the program, we can use the following steps:
 # Ensure capability of the program with a workload
 To ensure that the program is adequate for testing the scheduling policies and is capable of running for a sufficient amount of time to draw conclusions, we may want to consider the following:
 <ol> 
-  <li> Choose a representative workload: The workload that we use to test the scheduling policies should be representative of the type of work that we expect the system to perform in practice. For example, if we test the scheduling policies for a database server, we should use workloads that are similar to the types of queries that the database will receive.  </li>
+  <li> Choose a representative workload: The workload that we use to test the scheduling policies should be representative of the type of work that we expect the system to perform in practice. For example, if we test the scheduling policies for a database server, we should use workloads that are similar to the types of queries that the database will receive. In this benchmark tool CPU_bound workload is used for comparing. </li>
  
 <li>  Use a sufficient number of threads: The number of threads that we use to test the scheduling policies should be sufficient to stress the system and give the meaningful results. The optimal number of threads will depend on the hardware and workload, but as a general rule, we should use at least as many threads as there are CPU cores on the system. </li> 
  
