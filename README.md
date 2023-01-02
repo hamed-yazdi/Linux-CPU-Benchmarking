@@ -3,7 +3,7 @@ To test and compare a subset of the Linux scheduling policies available, we foll
 
 <ol>
   <li>Choose the scheduling policies: <b>SCHED_OTHER, SCHED_BATCH, SCHED_IDLE, SCHED_FIFO, and SCHED_RR</b>.</li>
-  <li>Write the program that creates multiple threads and assigns each thread to the same scheduling policy. We use the <b>"pthread_create"</b> function to create the threads. Each thread inherits the main program scheduling policies that was adjusted by sched_setattr function.
+  <li>Write the program that creates multiple threads and assigns each thread to the same scheduling policy. We use the <b>"pthread_create"</b> function to create the threads. Each thread inherits the main program scheduling policies that was adjusted by <b>"sched_setattr"</b> function.
 </li>
   <li>Write code to measure the throughput, latency, turnaround time and fairness of each thread. We use the <b>clock_t and tms</b> functions to measure the time taken for each thread to complete its work. The elapsed time of the program is also calculated by taking the difference between the start and end times.</li>
 <li>Run the program on different Linux scheduling policy and record the results. We can use the <b>chrt -p "PID"</b> command to determine the the Linux scheduling policy of each thread we are running.</li>
