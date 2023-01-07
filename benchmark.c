@@ -34,9 +34,9 @@ int sched_setattr(pid_t pid, const struct sched_attr *attr, unsigned int flags) 
 }
 /*CPU_bound workload*/
 void Func_cpu(void *arg){
+	st_time[tid] = times(&st_cpu[tid]);
 	int tid;
 	tid = (int)arg;
-	st_time[tid] = times(&st_cpu[tid]);
 	int z=0;
 	for(int i=0; i<1000; i++)
 		for(int j=0; j<1000; j++){
@@ -44,8 +44,8 @@ void Func_cpu(void *arg){
 			for(int k=0; k<1000; k++)
 				z++;
 		}
-	en_time[tid] = times(&en_cpu[tid]);
 	counter++;
+	en_time[tid] = times(&en_cpu[tid]);
 	pthread_exit(NULL);
 }
 /*show collected times in terminal and write them in a file*/
