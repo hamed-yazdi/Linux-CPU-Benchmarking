@@ -114,7 +114,7 @@ int main() {
     /*define multi-thread processes */
     pthread_t pthread[NUM_THREADS];
     for(int i=0; i<NUM_THREADS; i++){
-    	pthread_create(&pthread[i], NULL, Func_cpu, (void *)i);
+    	pthread_create(&pthread[i], NULL, Func_cpu, i);
     }
     /*Role back main scheduling policy to OTHER*/
     struct sched_attr attr_main_roleback = {
