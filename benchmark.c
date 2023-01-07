@@ -79,7 +79,7 @@ void show_result(){
 	fclose(fpt);
 }
 
-int main(int argc, char** argv) {
+int main() {
 	/*Set schedule policy attributes*/
     struct sched_attr attr = {
             .size = sizeof (attr),
