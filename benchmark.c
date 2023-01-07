@@ -112,9 +112,9 @@ int main() {
         };*/
     sched_setattr(0, &attr, 0);
     /*define multi-thread processes */
-    pthread_t pthreadA[NUM_THREADS];
+    pthread_t pthread[NUM_THREADS];
     for(int i=0; i<NUM_THREADS; i++){
-    	pthread_create(&pthreadA[i], NULL, Func_cpu, (void *)i);
+    	pthread_create(&pthread[i], NULL, Func_cpu, (void *)i);
     }
     /*Role back main scheduling policy to OTHER*/
     struct sched_attr attr_main_roleback = {
