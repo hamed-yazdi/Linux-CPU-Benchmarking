@@ -7,7 +7,6 @@
 #include <stdint.h>
 #include <time.h>
 #include <sys/times.h>
-#include <string.h>
 #define NUM_THREADS 10
 int counter=0;
 
